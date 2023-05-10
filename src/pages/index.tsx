@@ -1,72 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-interface DataItem {
-  id: number;
-}
-
-// React Hooks
-// function useFetch<T extends DataItem>(url: string) {
-const useFetch = <T extends DataItem>(url: string) => {
-  const [data, setData] = useState<T[]>([]);
-
+const useDocumentTitle = (title: string) => {
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch(url);
-      const data = await (res.json() as Promise<T[]>);
-
-      setData(data);
-    };
-
-    fetchData();
-  }, [url]);
-
-  return data;
+    document.title = title;
+  }, [title]);
 };
 
-interface User {
-  id: number;
-  name: string;
+interface UseLifeCycleHookProps {
+  onMount: () => void;
+  onUnmount: () => void;
 }
 
-const User = () => {
-  const url = 'https://jsonplaceholder.typicode.com/users';
-  const users = useFetch<User>(url);
+const useLifecycleHooks = ({ onMount, onUnmount }: UseLifeCycleHookProps) => {
+  useEffect(() => {
+    onMount();
 
-  return (
-    <ul>
-      {users.map((user) => (
-        <li key={user.id}>{user.name}</li>
-      ))}
-    </ul>
-  );
-};
-
-interface Todo {
-  id: number;
-  title: string;
-}
-
-const Todo = () => {
-  const url = 'https://jsonplaceholder.typicode.com/todos';
-  const todos = useFetch<Todo>(url);
-
-  return (
-    <ul>
-      {todos.map((todo) => (
-        <li key={todo.id}>{todo.title}</li>
-      ))}
-    </ul>
-  );
+    return () => onUnmount();
+  }, [onMount, onUnmount]);
 };
 
 const IndexPage = () => {
-  return (
-    <>
-      <User></User>
-      <br />
-      <Todo></Todo>
-    </>
-  );
+  useDocumentTitle('Page Title');
+  useLifecycleHooks({
+    onMount: () => console.log('mounted!'),
+    onUnmount: () => console.log('unmounting!'),
+  });
+
+  return <div></div>;
 };
 
 export default IndexPage;
