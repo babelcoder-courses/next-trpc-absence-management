@@ -9,7 +9,7 @@ import '~/styles/globals.css';
 import { type NextPage } from 'next';
 import { type ReactElement, type ReactNode } from 'react';
 
-type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (props: { children: ReactNode }) => ReactElement;
 };
 

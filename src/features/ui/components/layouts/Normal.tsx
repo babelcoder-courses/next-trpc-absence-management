@@ -10,6 +10,9 @@ const Layout = ({ children }: LayoutProps) => {
     <>
       <Navbar>
         <Navbar.Navbrand></Navbar.Navbrand>
+        <Navbar.NavItem to="/admin">Admin</Navbar.NavItem>
+        <Navbar.NavItem to="/leaves">Leaves</Navbar.NavItem>
+        <Navbar.NavItem to="/announcements">Announcements</Navbar.NavItem>
         <Navbar.NavItem to="/articles">Blog</Navbar.NavItem>
       </Navbar>
       <main>{children}</main>
