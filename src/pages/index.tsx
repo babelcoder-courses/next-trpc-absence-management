@@ -1,11 +1,19 @@
-import Button from '~/features/ui/components/Button';
+import { api } from '~/utils/api';
 
 const IndexPage = () => {
-  // JSX
+  const { data: articles, isLoading } = api.article.list.useQuery();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (!articles) return <div>No content.</div>;
+
   return (
-    <>
-      <Button>Hello</Button>
-    </>
+    <div>
+      <ul>
+        {articles.map((article) => (
+          <li key={article.id}>{article.title}</li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
