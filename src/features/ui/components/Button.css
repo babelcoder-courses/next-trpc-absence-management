@@ -1,0 +1,33 @@
+@layer components {
+  .btn {
+    @apply inline-block rounded px-6 pb-2 pt-2.5 uppercase leading-normal text-white transition duration-150 ease-in-out focus:outline-none;
+  }
+
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-700 focus:bg-primary-700;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-500 hover:bg-secondary-700 focus:bg-secondary-700;
+  }
+
+  .btn-success {
+    @apply bg-success-500 hover:bg-success-700 focus:bg-success-700;
+  }
+
+  .btn-danger {
+    @apply bg-danger-500 hover:bg-danger-700 focus:bg-danger-700;
+  }
+
+  .btn-info {
+    @apply bg-info-500 hover:bg-info-700 focus:bg-info-700;
+  }
+
+  .btn-warn {
+    @apply bg-warn-500 hover:bg-warn-700 focus:bg-warn-700;
+  }
+
+  .btn-default {
+    @apply bg-neutral-500 hover:bg-neutral-700 focus:bg-neutral-700;
+  }
+}
