@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import {
@@ -27,5 +28,51 @@ const articles: Article[] = [
 export const articleRouter = createTRPCRouter({
   list: publicProcedure.query(() => {
     return articles;
+  }),
+  byId: publicProcedure.input(z.number()).query(({ input }) => {
+    return articles.find((article) => article.id === input);
+  }),
+  add: publicProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        excerpt: z.string(),
+        content: z.string(),
+      }),
+    )
+    .mutation(({ input }) => {
+      const article = { id: articles.length + 1, ...input };
+      articles.push(article);
+
+      return article;
+    }),
+  update: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        data: z
+          .object({
+            title: z.string(),
+            excerpt: z.string(),
+            content: z.string(),
+          })
+          .partial(),
+      }),
+    )
+    .mutation(({ input }) => {
+      const { id, data } = input;
+      const article = articles.find((article) => article.id === id);
+
+      if (!article) throw new TRPCError({ code: 'NOT_FOUND' });
+
+      if (data.title) article.title = data.title;
+      if (data.excerpt) article.excerpt = data.excerpt;
+      if (data.content) article.content = data.content;
+
+      return article;
+    }),
+  remove: publicProcedure.input(z.number()).mutation(({ input }) => {
+    const index = articles.findIndex((article) => article.id === input);
+    articles.splice(index, 1);
   }),
 });
