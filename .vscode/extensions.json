@@ -2,6 +2,7 @@
   "recommendations": [
     "dbaeumer.vscode-eslint",
     "bradlc.vscode-tailwindcss",
-    "stivo.tailwind-fold"
+    "stivo.tailwind-fold",
+    "pflannery.vscode-versionlens"
   ]
 }

@@ -1,7 +1,8 @@
+import ArticleDetails from '~/features/articles/components/ArticleDetails';
 import Layout from '~/features/ui/components/layouts/Normal';
 
 const DetailsPage = () => {
-  return <div>Details Page</div>;
+  return <ArticleDetails></ArticleDetails>;
 };
 
 DetailsPage.getLayout = Layout;

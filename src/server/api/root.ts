@@ -1,6 +1,7 @@
 import { createTRPCRouter } from '~/server/api/trpc';
 import { articleRouter } from '~/server/api/routers/article';
 import { leaveRouter } from '~/server/api/routers/leave';
+import { announcementRouter } from '~/server/api/routers/announcement';
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
 
 /**
@@ -11,6 +12,7 @@ import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
 export const appRouter = createTRPCRouter({
   article: articleRouter,
   leave: leaveRouter,
+  announcement: announcementRouter,
 });
 
 // export type definition of API

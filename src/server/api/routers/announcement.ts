@@ -4,25 +4,21 @@ import { slugify } from '~/features/shared/helpers/slugify';
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
-// frontend => api.article.[list, byId, update, delete, add]
-// backend
-interface Article {
+interface Announcement {
   id: number;
   slug: string;
   title: string;
   excerpt: string;
   content: string;
-  image: string;
 }
 
-const articles: Article[] = [
+const announcements: Announcement[] = [
   {
     id: 1,
     title: 'Title#1',
     slug: 'slug-1',
     excerpt: 'Excerpt#1',
     content: 'Content#1',
-    image: '/uploads/photo-1678382154583-b45867cfc331.avif',
   },
   {
     id: 2,
@@ -30,7 +26,6 @@ const articles: Article[] = [
     slug: 'slug-2',
     excerpt: 'Excerpt#2',
     content: 'Content#2',
-    image: '/uploads/photo-1678382154583-b45867cfc331.avif',
   },
   {
     id: 3,
@@ -38,7 +33,6 @@ const articles: Article[] = [
     slug: 'slug-3',
     excerpt: 'Excerpt#3',
     content: 'Content#3',
-    image: '/uploads/photo-1678382154583-b45867cfc331.avif',
   },
   {
     id: 4,
@@ -46,7 +40,6 @@ const articles: Article[] = [
     slug: 'slug-4',
     excerpt: 'Excerpt#4',
     content: 'Content#4',
-    image: '/uploads/photo-1678382154583-b45867cfc331.avif',
   },
   {
     id: 5,
@@ -54,7 +47,6 @@ const articles: Article[] = [
     slug: 'slug-5',
     excerpt: 'Excerpt#5',
     content: 'Content#5',
-    image: '/uploads/photo-1678382154583-b45867cfc331.avif',
   },
   {
     id: 6,
@@ -62,38 +54,36 @@ const articles: Article[] = [
     slug: 'slug-6',
     excerpt: 'Excerpt#6',
     content: 'Content#6',
-    image: '/uploads/photo-1678382154583-b45867cfc331.avif',
   },
 ];
 
-export const articleRouter = createTRPCRouter({
+export const announcementRouter = createTRPCRouter({
   list: publicProcedure.query(() => {
-    return articles;
+    return announcements;
   }),
   byId: publicProcedure.input(z.number()).query(({ input }) => {
-    return articles.find((article) => article.id === input);
+    return announcements.find((announcement) => announcement.id === input);
   }),
   bySlug: publicProcedure.input(z.string()).query(({ input }) => {
-    return articles.find((article) => article.slug === input);
+    return announcements.find((announcement) => announcement.slug === input);
   }),
   add: publicProcedure
     .input(
       z.object({
         title: z.string(),
-        image: z.string(),
         excerpt: z.string(),
         content: z.string(),
       }),
     )
     .mutation(({ input }) => {
-      const article = {
-        id: articles.length + 1,
+      const announcement = {
+        id: announcements.length + 1,
         slug: slugify(input.title),
         ...input,
       };
-      articles.push(article);
+      announcements.push(announcement);
 
-      return article;
+      return announcement;
     }),
   update: publicProcedure
     .input(
@@ -102,7 +92,6 @@ export const articleRouter = createTRPCRouter({
         data: z
           .object({
             title: z.string(),
-            image: z.string(),
             excerpt: z.string(),
             content: z.string(),
           })
@@ -111,21 +100,25 @@ export const articleRouter = createTRPCRouter({
     )
     .mutation(({ input }) => {
       const { id, data } = input;
-      const article = articles.find((article) => article.id === id);
+      const announcement = announcements.find(
+        (announcement) => announcement.id === id,
+      );
 
-      if (!article) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (!announcement) throw new TRPCError({ code: 'NOT_FOUND' });
 
       if (data.title) {
-        article.title = data.title;
-        article.slug = slugify(data.title);
+        announcement.title = data.title;
+        announcement.slug = slugify(data.title);
       }
-      if (data.excerpt) article.excerpt = data.excerpt;
-      if (data.content) article.content = data.content;
+      if (data.excerpt) announcement.excerpt = data.excerpt;
+      if (data.content) announcement.content = data.content;
 
-      return article;
+      return announcement;
     }),
   remove: publicProcedure.input(z.number()).mutation(({ input }) => {
-    const index = articles.findIndex((article) => article.id === input);
-    articles.splice(index, 1);
+    const index = announcements.findIndex(
+      (announcement) => announcement.id === input,
+    );
+    announcements.splice(index, 1);
   }),
 });

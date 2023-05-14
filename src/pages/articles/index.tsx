@@ -1,7 +1,8 @@
+import ArticleList from '~/features/articles/components/ArticleList';
 import Layout from '~/features/ui/components/layouts/Normal';
 
 const IndexPage = () => {
-  return <div>Index Page</div>;
+  return <ArticleList></ArticleList>;
 };
 
 IndexPage.getLayout = Layout;
