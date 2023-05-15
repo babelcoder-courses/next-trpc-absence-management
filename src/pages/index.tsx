@@ -49,6 +49,7 @@ const IndexPage = () => {
       title: `My Title: ${dateString}`,
       excerpt: `My Excerpt: ${dateString}`,
       content: `My Content: ${dateString}`,
+      image: '/uploads/photo-1678382154583-b45867cfc331.avif',
     });
   };
   const update = (id: number) => {

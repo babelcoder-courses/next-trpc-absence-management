@@ -15,7 +15,7 @@ const statusColor = (status: Leave['status']) => {
   }
 };
 
-const LeaveItem = ({ id, reason, status, leaveDate }: LeaveItemProps) => {
+const LeaveItem = ({ reason, status, leaveDate }: LeaveItemProps) => {
   return (
     <div>
       <Badge color={statusColor(status)}>{status}</Badge>

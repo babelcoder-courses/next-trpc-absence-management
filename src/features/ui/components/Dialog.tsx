@@ -96,7 +96,7 @@ const Dialog = ({
                     {rejectTitle && (
                       <button
                         type="button"
-                        className="text-default-900 hover:bg-default-200 focus-visible:ring-default-500 bg-default-100 ml-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                        className="ml-2 inline-flex justify-center rounded-md border border-transparent bg-default-100 px-4 py-2 text-sm font-medium text-default-900 hover:bg-default-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-default-500 focus-visible:ring-offset-2"
                         onClick={onReject}
                       >
                         {rejectTitle}

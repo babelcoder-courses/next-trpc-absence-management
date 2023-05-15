@@ -1,15 +1,16 @@
 // /articles/slug
 
-import { useRouter } from 'next/router';
 import Card from '~/features/ui/components/Card';
 import Loading from '~/features/ui/components/Loading';
 import { api } from '~/utils/api';
+import { type Article } from '../types';
 
-const ArticleDetails = () => {
-  const router = useRouter();
-  const { data: article, isLoading } = api.article.bySlug.useQuery(
-    router.query.slug as string,
-  );
+export interface ArticleDetailsProps {
+  slug: Article['slug'];
+}
+
+const ArticleDetails = ({ slug }: ArticleDetailsProps) => {
+  const { data: article, isLoading } = api.article.bySlug.useQuery(slug);
 
   if (isLoading) return <Loading></Loading>;
   if (!article) return <div>No data found.</div>;
