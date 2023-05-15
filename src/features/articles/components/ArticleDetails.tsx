@@ -3,10 +3,10 @@
 import Card from '~/features/ui/components/Card';
 import Loading from '~/features/ui/components/Loading';
 import { api } from '~/utils/api';
-import { type Article } from '../types';
+import { type ArticleDetails } from '../types';
 
 export interface ArticleDetailsProps {
-  slug: Article['slug'];
+  slug: ArticleDetails['slug'];
 }
 
 const ArticleDetails = ({ slug }: ArticleDetailsProps) => {

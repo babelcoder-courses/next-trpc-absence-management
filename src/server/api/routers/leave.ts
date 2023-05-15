@@ -1,35 +1,26 @@
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
-interface Leave {
-  id: number;
-  reason: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  leaveDate: string;
-}
-
-const leaves: Leave[] = [
-  {
-    id: 1,
-    reason: 'Reason#1',
-    status: 'PENDING',
-    leaveDate: new Date().toDateString(),
-  },
-  {
-    id: 2,
-    reason: 'Reason#2',
-    status: 'APPROVED',
-    leaveDate: new Date().toDateString(),
-  },
-  {
-    id: 3,
-    reason: 'Reason#3',
-    status: 'REJECTED',
-    leaveDate: new Date().toDateString(),
-  },
-];
-
 export const leaveRouter = createTRPCRouter({
-  list: publicProcedure.query(() => {
+  list: publicProcedure.query(async ({ ctx }) => {
+    const leaves = await ctx.prisma.leave.findMany({
+      select: {
+        id: true,
+        reason: true,
+        leaveDate: true,
+        status: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
     return leaves;
   }),
 });

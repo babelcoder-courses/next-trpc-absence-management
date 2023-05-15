@@ -1,3 +1,4 @@
 import { type RouterOutput } from '~/server/api/root';
 
-export type Article = RouterOutput['article']['list'][number];
+export type ArticleItem = RouterOutput['article']['list'][number];
+export type ArticleDetails = RouterOutput['article']['bySlug'];

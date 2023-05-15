@@ -18,5 +18,8 @@ const config = {
     locales: ['en'],
     defaultLocale: 'en',
   },
+  images: {
+    domains: ['loremflickr.com', 'picsum.photos'],
+  },
 };
 export default config;
