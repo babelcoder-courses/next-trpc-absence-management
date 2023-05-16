@@ -1,10 +1,12 @@
 import Badge from '~/features/ui/components/Badge';
-import { type Leave } from '../types';
+import { type LeaveItem } from '../types';
 import { toDateString } from '~/features/shared/helpers/date';
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
-export type LeaveItemProps = Leave;
+export type LeaveItemProps = LeaveItem;
 
-const statusColor = (status: Leave['status']) => {
+const statusColor = (status: LeaveItem['status']) => {
   switch (status) {
     case 'PENDING':
       return 'info';
@@ -15,12 +17,15 @@ const statusColor = (status: Leave['status']) => {
   }
 };
 
-const LeaveItem = ({ reason, status, leaveDate }: LeaveItemProps) => {
+const LeaveItem = ({ reason, status, leaveDate, id }: LeaveItemProps) => {
   return (
     <div>
       <Badge color={statusColor(status)}>{status}</Badge>
       <p>{reason}</p>
       <div>{toDateString(leaveDate)}</div>
+      <Link href={`/leaves/${id}/edit`}>
+        <PencilSquareIcon className="h-6 w-6"></PencilSquareIcon>
+      </Link>
     </div>
   );
 };

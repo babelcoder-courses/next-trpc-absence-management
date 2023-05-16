@@ -1,8 +1,11 @@
 import Loading from '~/features/ui/components/Loading';
 import { api } from '~/utils/api';
 import LeaveItem from './LeaveItem';
+import FloatingActionButton from '~/features/ui/components/FloatingActionButton';
+import { useRouter } from 'next/router';
 
 const LeaveList = () => {
+  const router = useRouter();
   const { data: leaves, isLoading } = api.leave.list.useQuery(); // CSR
 
   if (isLoading) return <Loading></Loading>;
@@ -13,6 +16,9 @@ const LeaveList = () => {
       {leaves.map((leave) => (
         <LeaveItem key={leave.id} {...leave}></LeaveItem>
       ))}
+      <FloatingActionButton onClick={() => router.push('/leaves/new')}>
+        +
+      </FloatingActionButton>
     </div>
   );
 };
