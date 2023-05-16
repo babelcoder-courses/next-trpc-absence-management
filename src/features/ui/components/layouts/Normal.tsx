@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 import Navbar from '../Navbar';
+import Toast from '../Toast';
 
 export interface LayoutProps {
   children: ReactNode;
@@ -16,6 +17,7 @@ const Layout = ({ children }: LayoutProps) => {
         <Navbar.NavItem to="/articles">Blog</Navbar.NavItem>
       </Navbar>
       <main>{children}</main>
+      <Toast></Toast>
     </>
   );
 };

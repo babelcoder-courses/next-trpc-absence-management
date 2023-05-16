@@ -2,8 +2,10 @@ import { api } from '~/utils/api';
 import { type AddLeaveInput } from '../types';
 import LeaveForm from './LeaveForm';
 import { useRouter } from 'next/router';
+import { useAppStore } from '~/features/store';
 
 const CreateLeave = () => {
+  const setUiToast = useAppStore((state) => state.setUiToast);
   const router = useRouter();
   const utils = api.useContext();
   const list = utils.leave.list;
@@ -40,6 +42,10 @@ const CreateLeave = () => {
   });
   const createLeave = (leave: AddLeaveInput) => {
     add(leave);
+    setUiToast({
+      type: 'Success',
+      message: 'The leave has been already created.',
+    });
     router.push('/leaves');
   };
 
