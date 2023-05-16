@@ -1,10 +1,10 @@
 import Card from '~/features/ui/components/Card';
 import Loading from '~/features/ui/components/Loading';
 import { api } from '~/utils/api';
-import { type Announcement } from '../types';
+import { type AnnouncementDetails } from '../types';
 
 export interface AnnouncementDetailsProps {
-  slug: Announcement['slug'];
+  slug: AnnouncementDetails['slug'];
 }
 
 const AnnouncementDetails = ({ slug }: AnnouncementDetailsProps) => {

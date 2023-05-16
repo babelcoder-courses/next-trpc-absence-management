@@ -4,68 +4,48 @@ import { slugify } from '~/features/shared/helpers/slugify';
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
-interface Announcement {
-  id: number;
-  slug: string;
-  title: string;
-  excerpt: string;
-  content: string;
-}
-
-const announcements: Announcement[] = [
-  {
-    id: 1,
-    title: 'Title#1',
-    slug: 'slug-1',
-    excerpt: 'Excerpt#1',
-    content: 'Content#1',
-  },
-  {
-    id: 2,
-    title: 'Title#2',
-    slug: 'slug-2',
-    excerpt: 'Excerpt#2',
-    content: 'Content#2',
-  },
-  {
-    id: 3,
-    title: 'Title#3',
-    slug: 'slug-3',
-    excerpt: 'Excerpt#3',
-    content: 'Content#3',
-  },
-  {
-    id: 4,
-    title: 'Title#4',
-    slug: 'slug-4',
-    excerpt: 'Excerpt#4',
-    content: 'Content#4',
-  },
-  {
-    id: 5,
-    title: 'Title#5',
-    slug: 'slug-5',
-    excerpt: 'Excerpt#5',
-    content: 'Content#5',
-  },
-  {
-    id: 6,
-    title: 'Title#6',
-    slug: 'slug-6',
-    excerpt: 'Excerpt#6',
-    content: 'Content#6',
-  },
-];
-
 export const announcementRouter = createTRPCRouter({
-  list: publicProcedure.query(() => {
+  list: publicProcedure.query(async ({ ctx }) => {
+    const announcements = await ctx.prisma.announcement.findMany({
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
     return announcements;
   }),
-  byId: publicProcedure.input(z.number()).query(({ input }) => {
-    return announcements.find((announcement) => announcement.id === input);
+  byId: publicProcedure.input(z.number()).query(async ({ input, ctx }) => {
+    const announcement = await ctx.prisma.announcement.findUnique({
+      where: { id: input },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+      },
+    });
+
+    if (!announcement) throw new TRPCError({ code: 'NOT_FOUND' });
+
+    return announcement;
   }),
-  bySlug: publicProcedure.input(z.string()).query(({ input }) => {
-    return announcements.find((announcement) => announcement.slug === input);
+  bySlug: publicProcedure.input(z.string()).query(async ({ input, ctx }) => {
+    const announcement = await ctx.prisma.announcement.findUnique({
+      where: { slug: input },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+      },
+    });
+
+    if (!announcement) throw new TRPCError({ code: 'NOT_FOUND' });
+
+    return announcement;
   }),
   add: publicProcedure
     .input(
@@ -75,13 +55,10 @@ export const announcementRouter = createTRPCRouter({
         content: z.string(),
       }),
     )
-    .mutation(({ input }) => {
-      const announcement = {
-        id: announcements.length + 1,
-        slug: slugify(input.title),
-        ...input,
-      };
-      announcements.push(announcement);
+    .mutation(async ({ input, ctx }) => {
+      const announcement = await ctx.prisma.announcement.create({
+        data: { ...input, slug: slugify(input.title), userId: 1 },
+      });
 
       return announcement;
     }),
@@ -98,27 +75,19 @@ export const announcementRouter = createTRPCRouter({
           .partial(),
       }),
     )
-    .mutation(({ input }) => {
-      const { id, data } = input;
-      const announcement = announcements.find(
-        (announcement) => announcement.id === id,
-      );
-
-      if (!announcement) throw new TRPCError({ code: 'NOT_FOUND' });
-
-      if (data.title) {
-        announcement.title = data.title;
-        announcement.slug = slugify(data.title);
-      }
-      if (data.excerpt) announcement.excerpt = data.excerpt;
-      if (data.content) announcement.content = data.content;
+    .mutation(async ({ input, ctx }) => {
+      const announcement = await ctx.prisma.announcement.update({
+        where: { id: input.id },
+        data: input.data.title
+          ? { ...input, slug: slugify(input.data.title) }
+          : input.data,
+      });
 
       return announcement;
     }),
-  remove: publicProcedure.input(z.number()).mutation(({ input }) => {
-    const index = announcements.findIndex(
-      (announcement) => announcement.id === input,
-    );
-    announcements.splice(index, 1);
+  remove: publicProcedure.input(z.number()).mutation(async ({ input, ctx }) => {
+    await ctx.prisma.announcement.delete({
+      where: { id: input },
+    });
   }),
 });
