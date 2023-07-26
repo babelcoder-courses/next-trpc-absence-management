@@ -2,6 +2,7 @@ import { createTRPCRouter } from '~/server/api/trpc';
 import { articleRouter } from '~/server/api/routers/article';
 import { leaveRouter } from '~/server/api/routers/leave';
 import { authRouter } from '~/server/api/routers/auth';
+import { adminLeaveRouter } from '~/server/api/routers/admin/leave';
 import { announcementRouter } from '~/server/api/routers/announcement';
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
 
@@ -15,6 +16,9 @@ export const appRouter = createTRPCRouter({
   article: articleRouter,
   leave: leaveRouter,
   announcement: announcementRouter,
+  admin: createTRPCRouter({
+    leave: adminLeaveRouter,
+  }),
 });
 
 // export type definition of API

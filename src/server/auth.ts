@@ -7,7 +7,6 @@ import {
 } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { env } from '~/env.mjs';
 import { prisma } from '~/server/db';
 import { type Role } from '@prisma/client';
 
@@ -21,8 +20,7 @@ declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
+      role: Role;
     } & DefaultSession['user'];
   }
 
@@ -58,9 +56,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt({ token, user, session, trigger }) {
       if (trigger === 'update' && isUpdateSessionData(session)) {
-        if(session.image) token.picture = session.image;
-        if(session.name) token.name = session.name;
-        if(session.email) token.email = session.email;
+        if (session.image) token.picture = session.image;
+        if (session.name) token.name = session.name;
+        if (session.email) token.email = session.email;
       }
 
       if (user) {
@@ -74,7 +72,6 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     session: ({ session, token }) => {
-      console.log('SESSION')
       return {
         ...session,
         user: {

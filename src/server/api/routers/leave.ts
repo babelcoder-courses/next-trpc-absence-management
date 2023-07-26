@@ -1,13 +1,14 @@
-import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
+import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
 import * as validators from '~/features/leaves/helpers/validators';
 import * as z from 'zod';
 import { TRPCError } from '@trpc/server';
-import { setTimeout } from 'timers/promises';
 
 export const leaveRouter = createTRPCRouter({
-  list: publicProcedure.query(async ({ ctx }) => {
-    await setTimeout(5000);
+  list: protectedProcedure.query(async ({ ctx }) => {
     const leaves = await ctx.prisma.leave.findMany({
+      where: {
+        userId: +ctx.session.user.id,
+      },
       select: {
         id: true,
         reason: true,
@@ -28,7 +29,7 @@ export const leaveRouter = createTRPCRouter({
 
     return leaves;
   }),
-  byId: publicProcedure.input(z.number()).query(async ({ input, ctx }) => {
+  byId: protectedProcedure.input(z.number()).query(async ({ input, ctx }) => {
     const leave = await ctx.prisma.leave.findUnique({
       where: { id: input },
       select: {
@@ -42,21 +43,30 @@ export const leaveRouter = createTRPCRouter({
 
     return leave;
   }),
-  add: publicProcedure
+  add: protectedProcedure
     .input(validators.add)
     .mutation(async ({ input, ctx }) => {
       const leave = await ctx.prisma.leave.create({
         data: {
           ...input,
-          userId: 1,
+          userId: +ctx.session.user.id,
         },
       });
 
       return leave;
     }),
-  update: publicProcedure
+  update: protectedProcedure
     .input(validators.update)
     .mutation(async ({ input, ctx }) => {
+      const existingLeave = await ctx.prisma.leave.findUnique({
+        where: { id: input.id },
+      });
+
+      // ABAC => Attribute-Based Access Control
+      if (existingLeave?.userId !== +ctx.session.user.id) {
+        throw new TRPCError({ code: 'FORBIDDEN' });
+      }
+
       const leave = await ctx.prisma.leave.update({
         where: { id: input.id },
         data: input.data,

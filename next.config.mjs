@@ -27,7 +27,7 @@ const config = {
     defaultLocale: 'en',
   },
   images: {
-    domains: ['loremflickr.com', 'picsum.photos'],
+    domains: ['loremflickr.com', 'picsum.photos', 'cloudflare-ipfs.com'],
   },
 };
 export default config;

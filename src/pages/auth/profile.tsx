@@ -1,11 +1,11 @@
 import Profile from '~/features/auth/components/Profile';
-import { NextPageWithLayout } from '../_app';
+import { type NextPageWithLayout } from '../_app';
 import Layout from '~/features/ui/components/layouts/Normal';
 
 const ProfilePage: NextPageWithLayout = () => {
   return <Profile></Profile>;
 };
 
-ProfilePage.getLayout = Layout
+ProfilePage.getLayout = Layout;
 
 export default ProfilePage;

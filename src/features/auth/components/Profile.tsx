@@ -29,7 +29,7 @@ const Profile = () => {
 
   const updateProfile: SubmitHandler<ProfileInput> = async (profile) => {
     await update(profile);
-    await updateSession(profile)
+    await updateSession(profile);
 
     setUiToast({
       type: 'Success',
