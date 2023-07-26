@@ -1,6 +1,7 @@
 import { createTRPCRouter } from '~/server/api/trpc';
 import { articleRouter } from '~/server/api/routers/article';
 import { leaveRouter } from '~/server/api/routers/leave';
+import { authRouter } from '~/server/api/routers/auth';
 import { announcementRouter } from '~/server/api/routers/announcement';
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
 
@@ -10,6 +11,7 @@ import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+  auth: authRouter,
   article: articleRouter,
   leave: leaveRouter,
   announcement: announcementRouter,
