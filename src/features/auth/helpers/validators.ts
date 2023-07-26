@@ -10,3 +10,16 @@ export const register = login.merge(
     name: z.string().min(1).max(20),
   }),
 );
+
+export const profile = register
+  .pick({ name: true, email: true })
+  .merge(
+    z.object({
+      image: z.string(),
+      password: z.preprocess(
+        (v) => (v === '' ? undefined : v),
+        z.string().min(8).optional(),
+      ),
+    }),
+  )
+  .partial();
