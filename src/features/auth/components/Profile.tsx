@@ -29,7 +29,7 @@ const Profile = () => {
 
   const updateProfile: SubmitHandler<ProfileInput> = async (profile) => {
     await update(profile);
-    await updateSession(profile)
+    await updateSession(profile);
 
     setUiToast({
       type: 'Success',
@@ -54,7 +54,9 @@ const Profile = () => {
                 ? getImagePath(session?.user.image)
                 : '/assets/images/avatar.png'
             }
-            onImageChanged={(image) => {}}
+            onImageChanged={(image) => {
+              setValue('image', image, { shouldValidate: true });
+            }}
             error={errors.image?.message}
           ></AvatarUploader>
         </div>
