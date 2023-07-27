@@ -54,7 +54,9 @@ const Profile = () => {
                 ? getImagePath(session?.user.image)
                 : '/assets/images/avatar.png'
             }
-            onImageChanged={(image) => {}}
+            onImageChanged={(image) => {
+              setValue('image', image, { shouldValidate: true });
+            }}
             error={errors.image?.message}
           ></AvatarUploader>
         </div>

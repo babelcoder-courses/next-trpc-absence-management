@@ -29,7 +29,7 @@ export default function AuthMenu() {
               priority
               src={
                 session?.user.image
-                  ? session?.user.image
+                  ? `/uploads/${session?.user.image}`
                   : '/assets/images/avatar.png'
               }
               alt={session?.user.name ?? 'Member'}
