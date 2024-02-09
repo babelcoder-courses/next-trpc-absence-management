@@ -9,7 +9,9 @@
     "lint": "next lint --fix",
     "start": "next start",
     "db:seed": "prisma db seed",
-    "db:push": "prisma db push"
+    "db:push": "prisma db push",
+    "db:reset": "prisma migrate reset",
+    "db:deploy": "prisma migrate deploy"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

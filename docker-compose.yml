@@ -1,9 +1,31 @@
 version: '3.9'
 services:
-  db:
-    image: 'postgres:15.3-alpine3.18'
+  app:
+    platform: 'linux/amd64'
+    build:
+      context: .
+      dockerfile: Dockerfile
+      network: host
+      args:
+        NEXT_PUBLIC_CLIENTVAR: 'clientvar'
+        DATABASE_URL: 'postgresql://myapp:mypassword@localhost:9101/next-trpc-absence-management?schema=public'
+        NEXTAUTH_SECRET: 'p0I0oiZgFGhha0eQKzumB5Awyeqe4hQ2jmaQ4t/HuMk='
+        NEXTAUTH_URL: 'http://localhost:3000'
+    working_dir: /app
     ports:
-      - '9111:5432'
+      - '3000:3000'
+    image: absence-management
+    environment:
+      DATABASE_URL: 'postgresql://myapp:mypassword@db:5432/next-trpc-absence-management?schema=public'
+      NEXTAUTH_SECRET: p0I0oiZgFGhha0eQKzumB5Awyeqe4hQ2jmaQ4t/HuMk=
+      NEXTAUTH_URL: 'http://localhost:3000'
+    depends_on:
+      - db
+  db:
+    image: 'postgres:15.2-alpine3.17'
+    ports:
+      - '9101:5432'
     environment:
       POSTGRES_USER: myapp
       POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: next-trpc-absence-management
